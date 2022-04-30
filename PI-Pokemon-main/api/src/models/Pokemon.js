@@ -35,7 +35,7 @@ module.exports = (sequelize) => {
     speed:{
       type: DataTypes.INTEGER,
     },
-    createdInDB:{
+    createdInDb:{
       type: DataTypes.BOOLEAN,
       allowNull:false,
       defaultValue: true,
