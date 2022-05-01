@@ -36,7 +36,7 @@ const getApi = async () => {
                 let url = await axios.get(p.url);
                 delete p.url;
                 p.id = url.data.id;
-                p.img = url.data.sprites.other.dream_world.front_default;
+                p.img = url.data.sprites.versions["generation-v"]["black-white"].animated.front_default
                 p.hp = url.data.stats[0].base_stat;
                 p.attack = url.data.stats[1].base_stat;
                 p.defense = url.data.stats[2].base_stat;
@@ -50,42 +50,46 @@ const getApi = async () => {
             
             
         }
-
         
+        const getpokemonid = async (id) => {
+        const e = await axios.get(`https://pokeapi.co/api/v2/pokemon/${id}`)
             
-            
-           // id: e.id,
-        
-            //img: e.
-           // types: e.types.map((e) => e.type.name).join(', '),
-            //attack: e.stats[1].base_stat,
-           // height: e.height,
-            //weight: e.weight,
-            //hp: e.stats[0].base_stat,
-            //defense: e.stats[2].base_stat,
-            //speed: e.stats[5].base_stat,
+       let pok = {
+            name:e.data.name,
+            id: e.data.id,
+            img: e.data.sprites.versions["generation-v"]["black-white"].animated.front_default,
+            types: e.data.types.map((e) => e.type.name).join(', '),
+            attack: e.data.stats[1].base_stat,
+            height: e.data.height,
+            weight: e.data.weight,
+            hp: e.data.stats[0].base_stat,
+            defense: e.data.stats[2].base_stat,
+            speed: e.data.stats[5].base_stat,
      
-            
-            
-  /*     const getPoke = async () => {
-    const Apik = await axios.get(
-        'https://pokeapi.co/api/v2/pokemon/'
-        )
+            }
+            return pok
+        }
 
-        let reApi = await Apik.data.results.map((el) =>  el.url)
-            
-    }
-        
-        const getPok = async () => {
-                let Ap = await reApi.forEach((elem) => {
-                return{
-                    pikachu: axios.get(elem.data) }})
-                    return getPok
-                
-       }
-                  
- */
-           
+
+        const getpokemonname = async (name) => {
+            const e = await axios.get(`https://pokeapi.co/api/v2/pokemon/${name}`)
+           let poke = {
+                name:e.data.name,
+                id: e.data.id,
+                img: e.data.sprites.versions["generation-v"]["black-white"].animated.front_default,
+                types: e.data.types.map((e) => e.type.name).join(', '),
+                attack: e.data.stats[1].base_stat,
+                height: e.data.height,
+                weight: e.data.weight,
+                hp: e.data.stats[0].base_stat,
+                defense: e.data.stats[2].base_stat,
+                speed: e.data.stats[5].base_stat,
+         
+                }
+                return poke
+            }
+
+       
    
 
 
@@ -103,4 +107,4 @@ const getApi = async () => {
     }
 
 module.exports = 
-    getAll;
+    {getAll , getpokemonid,getpokemonname};

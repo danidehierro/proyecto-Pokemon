@@ -3,7 +3,7 @@ const { Router } = require('express');
 const express = require('express')
 // Importar todos los routers;
 // Ejemplo: const authRouter = require('./auth.js');
-const  getAll  = require('../Controllers/controllers.js');
+const  {getAll, getpokemonid,getpokemonname}  = require('../Controllers/controllers.js');
 const { Pokemon , Types } = require('../db');
 
 const router = Router();
@@ -12,20 +12,26 @@ const router = Router();
 
 
 router.get('/pokemons/:id', async(req,res) => {
+ try {
+       let id = req.params.id
+       let pokid = await getpokemonid(id)
+    res.send(pokid)
+ } catch (error) {
+      console.log(error)
+ }   
+ 
     
 })
 
     router.get('/pokemons', async(req,res) => {
         let name = req.query.name
-        //console.log(name)
        try {
-        const poke = await getAll();
         if (name){
-            const pokem = await axios.get(`https://pokeapi.co/api/v2/pokemon/${name}`)
-            console.log(pokem.data)
-            res.status(200).json(pokem.data) 
+            let pokem = await getpokemonname(name)
+            res.status(200).json(pokem)
             
         }else {
+            const poke = await getAll();
             res.status(200).json(poke)
         }
     
