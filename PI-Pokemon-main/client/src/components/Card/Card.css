@@ -1,10 +1,10 @@
 .Card{
     display: grid;
-    grid-template-columns: 250px;
-    grid-template-rows: 50px 50px;
+    grid-template-columns: 190px;
+    grid-template-rows: 40px 40px;
     justify-content:center;
-    width: 300px;
-    height: 380px;
+    width: 180px;
+    height: 280px;
     border-radius: 20px;
     color:black;
     background-color: rgba(43, 233, 192, 0.24);
@@ -14,10 +14,20 @@
 } 
 .image{
 
-    height: 200px;
-    width: 200px;
+    height: 100px;
+    width: 100px;
     
 }
+.Card:hover {
+    transform: perspective(500px) rotateY(15deg);
+    text-shadow: -2px 1px 1px white;
+    box-shadow: -2px 0 0 5px rgb(6, 241, 222);
+}
+.Card:hover::before {
+    left: 100%;
+}
+
+
 .container{
     display:flex;
     justify-content: center;
@@ -39,8 +49,15 @@
 
     text-decoration: none;
     color:black;
-    font-family: Georgia;
+    font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
     font-style: oblique;
-    font-size:medium;
+    font-size:xx-large;
+    margin: 10px;
 
+}
+
+.types{
+   display: flex;
+   align-items: flex-end;
+   justify-content: end;
 }
