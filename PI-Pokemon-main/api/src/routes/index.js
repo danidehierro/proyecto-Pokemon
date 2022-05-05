@@ -27,7 +27,7 @@ router.get('/pokemons/:id', async(req,res) => {
         let name = req.query.name
        try {
         if (name){
-            let pokem = await getpokemonname(name)
+            let pokem = await getpokemonname(name.toLowerCase())
             res.status(200).json(pokem)
             
         }else {

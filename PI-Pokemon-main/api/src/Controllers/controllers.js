@@ -22,17 +22,75 @@ const getDb = async () => {
 
     }
 };
+const getApi = () =>{
+   return(   axios.get( "https://pokeapi.co/api/v2/pokemon?limit=40").then(pokemonsApi => {
+            const pk = pokemonsApi.data.results
 
-const getApi = async () => {
-    const Api = await axios.get(
-        'https://pokeapi.co/api/v2/pokemon/'
-        )
-        const Apik = await axios.get(
-            Api.data.next
-            )
-            const apiAll = Api.data.results.concat(Apik.data.results)
+            const res = pk.slice(0,10).map(e => axios.get(e.url))
+       return res
+      })
+          .then(pokem => {
+            let pokemons = Promise.all(pokem)
+            return pokemons
+              
+          })
+    
         
-            for (let p of apiAll) {
+        .then(e => {
+            let pokemon =e.map(e=> e.data)
+            // console.log(pokemon)
+            let allData = []
+            pokemon.map(e => {
+                // console.log(e.types[0].type.name)
+                allData.push({
+                        id: e.id,
+                        name : e.name,
+                        hp: e.stats[0].base_stat,
+                        attack: e.stats[1].base_stat,
+                        defense: e.stats[2].base_stat,
+                        speed: e.stats[5].base_stat,
+                        height: e.height,
+                        weight: e.weight,
+                        img: e.sprites.other.home.front_default,
+                        types: e.types.length < 2 ? [e.types[0].type.name] : [e.types[0].type.name, e.types[1].type.name]
+
+                })
+            })
+            //console.log(allData)
+            return allData
+        })
+        
+
+   )}
+
+/* let getApi = async () => {
+    try {
+        let info = [];
+        for (let i = 1; i <= 40; i++) {
+            info.push(await axios.get('https://pokeapi.co/api/v2/pokemon/' + i));
+            console.log(info[i-1].data.id)
+        }
+        return await Promise.all(info).then((response) => {
+            const pokemones = response.map((info) => {
+                return (poke = {
+                    name: info.data.name,
+                    id: info.data.id,
+                    img: info.data.sprites.other.dream_world.front_default,
+                    types: info.data.types.map((e) => e.type.name),
+                    attack: info.data.stats[1].base_stat,
+                });
+            });
+            return pokemones;
+        });
+    } catch (error) {
+        console.log (error)
+    }
+}; */
+/* const getApi = async () => {
+    const Api = await axios.get( "https://pokeapi.co/api/v2/pokemon?limit=40")
+        
+        
+            for (let p of Api.data.results) {
                 let url = await axios.get(p.url);
                 delete p.url;
                 p.id = url.data.id;
@@ -49,27 +107,46 @@ const getApi = async () => {
        return apiAll;
             
             
-        }
+        } */
         
         const getpokemonid = async (id) => {
-        const e = await axios.get(`https://pokeapi.co/api/v2/pokemon/${id}`)
-            
+            let e= undefined;
+          if(id.length > 10){
+         e = await Pokemon.findOne({
+               where: {
+                   id 
+               },
+               include:{
+                model:Types,
+                attributes:["name"],
+                through:{
+                    attributes:[]
+                }
+            }   
+        })
+         
+
+          } else{ 
+         e = await axios.get(`https://pokeapi.co/api/v2/pokemon/${id}`)
+          }  
+          console.log(e.dataValues) 
        let pok = {
-            name:e.data.name,
-            id: e.data.id,
-            img: e.data.sprites.versions["generation-v"]["black-white"].animated.front_default,
-            types: e.data.types.map((e) => e.type.name).join(', '),
-            attack: e.data.stats[1].base_stat,
-            height: e.data.height,
-            weight: e.data.weight,
-            hp: e.data.stats[0].base_stat,
-            defense: e.data.stats[2].base_stat,
-            speed: e.data.stats[5].base_stat,
+            name: e.data ? e.data.name: e.dataValues.name,
+            id:e.data ? e.data.id : e.dataValues.id,
+            img:e.data ? e.data.sprites.versions["generation-v"]["black-white"].animated.front_default : e.dataValues.img,
+            types:e.data ? e.data.types.map((e) => e.type.name).join(', '): e.dataValues.types,
+            attack:e.data ? e.data.stats[1].base_stat: e.dataValues.attack,
+            height:e.data ? e.data.height: e.dataValues.height,
+            weight:e.data ? e.data.weight: e.dataValues.weight,
+            hp:e.data ? e.data.stats[0].base_stat: e.dataValues.hp,
+            defense:e.data ? e.data.stats[2].base_stat: e.dataValues.defense,
+            speed:e.data ? e.data.stats[5].base_stat: e.dataValues.speed,
      
             }
+            
             return pok
         }
-
+           
 
         const getpokemonname = async (name) => {
             const e = await axios.get(`https://pokeapi.co/api/v2/pokemon/${name}`)
@@ -96,13 +173,14 @@ const getApi = async () => {
 
 
 
-
+            
 
     
     const getAll = async () => {
-        const allApi = await getApi();
+       const allApi = await getApi().then(res => res);
         const allDb = await getDb();
         const total = allApi.concat(allDb);
+       console.log(allApi)
         return total;
     }
 
