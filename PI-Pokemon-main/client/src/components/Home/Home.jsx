@@ -2,25 +2,27 @@ import React from "react";
 import {useEffect, useState} from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { getPokemons, orderByName, orderByAttack,filterPokemonsByTypes } from "../../actions/index";
+import { getPokemons, orderByName, orderByAttack,filterPokemonsByTypes, filterCreated } from "../../actions/index";
 import Card from "../Card/Card";
 import './Home.css'
 import Pagin from "../Pagin/Pagin";
 import Search from "../Search/Search.jsx"
+import gif from '../image/charmander-marshmallows-unscreen.gif';
 
 export default function Home (){
     const dispatch = useDispatch()
     const allPokemon = useSelector((state) => state.pokemons)
-    
+    const type = useSelector((state) => state.pokemons.types)
+    console.log(allPokemon)
     const [orden, setOrden]= useState('')
     const [currentPage, setCurrentPage] = useState(1)
     const [pokemonsPerPage, setpokemonsPerPage] = useState(12)
     const indexOfLastPokemon = currentPage * pokemonsPerPage // 6
     const indexOfFirstPokemon = indexOfLastPokemon - pokemonsPerPage // 0
-    const currentPokemons = allPokemon.slice(indexOfFirstPokemon,indexOfLastPokemon)
-    console.log(currentPokemons)
-    const types = currentPokemons.map(el => el.type.map(ele => ele))
-     console.log(types)
+    const currentPokemons = Array.isArray(allPokemon)? allPokemon.slice(indexOfFirstPokemon,indexOfLastPokemon):[allPokemon]
+    //console.log(currentPokemons)
+    //const types = currentPokemons.map(el => el.type.map(ele => ele))
+    // console.log(types)
     const pagin =(pageNumber) => {
         setCurrentPage(pageNumber)
     }
@@ -30,10 +32,7 @@ export default function Home (){
   
     
   
-    function handleClick(e){
-        e.preventDefault();
-        dispatch(getPokemons());
-    }
+   
   
     function handleSort (e){
         e.preventDefault();
@@ -49,17 +48,20 @@ export default function Home (){
     }
   
     function handleFilterTypes(e){
-        //console.log(filterRecipesByDiets(e.target.value))
+        console.log(filterPokemonsByTypes(e.target.value))
         dispatch(filterPokemonsByTypes(e.target.value))
+    }
+    function handleFilterCreated(e){
+        dispatch(filterCreated(e.target.value))
     }
 
 return (
     <div className="navcontainer">
 
-  <Link to= '/pokemon'>
+  <Link to= '/pokemons'>
       <button>Crear Pokemon</button>
   </Link>
-  <h1 className="titlehome"> HEALTHY FOOD </h1>
+  <h1 className="titlehome"> APP POKEMÓN </h1>
     
     <div>
         <div className="search">
@@ -71,16 +73,44 @@ return (
            <option value= 'low'> For Low Attack </option>
            <option value= 'high'> BY High Attack </option>
            </select>
-          {/*  <select onChange={e => handleFilterTypes(e)}>            
-           <option value="all">Filter by Types</option>
-                             {types?.map((d) => (
-                                <option key={d.name} value={d.name}>
-                                            {" "}
-                                    {d.name[0].toUpperCase() + d.name.slice(1)}
-                                </option>
-                              ))};
+           <select onChange={e => handleFilterCreated(e)}>
+            <option value= 'All'> All pokemons </option>
+            <option value= 'api'> Existing </option>
+            <option value= 'created'> Created  </option>
+           </select>
+           <select onChange={e => handleFilterTypes(e)}>
+           <option value="All">All types</option>
+                    <option value= 'poison'> poison</option>
+                    <option value= 'fire'> fire</option>
+                    <option value= 'water'> water </option>
+                    <option value= 'electric'> electric </option>
+                    <option value= 'psychic'> psychic </option>
+                    <option value= 'ice'> ice </option>
+                    <option value= 'dragon'> dragon </option>
+                    <option value= 'normal'> normal </option>
+                    <option value= 'dark'> dark </option>
+                    <option value= 'fairy'> fairy </option>
+                    <option value= 'unknown'> unknown </option>
+                    <option value= 'shadow'> shadow </option>
+                    <option value= 'fighting'> fighting </option>
+                    <option value= 'flying'> flying </option>
+                    <option value= 'ground'> ground </option>
+                    <option value= 'rock'> rock </option>
+                    <option value= 'bug'> bug </option>
+                    <option value= 'ghost'> ghost </option>
+                    <option value= 'steel'> steel </option>
+                    <option value= 'grass'> grass </option>
 
-             </select> */}
+
+                  {/*   {
+                      
+                        type?.map(el => {
+                            return(
+                                <option key={el.id} value={el.name}>{el.name}</option>
+                            )
+                        }) 
+                    } */}
+                </select>
            
   </div>
          
@@ -97,15 +127,15 @@ return (
              <div className="container">
             {
                currentPokemons.length >0 ? currentPokemons.map((e, index) =>{
-                    console.log(e.name)
+                    
                   return (
                        
                             <div className= 'cardContainer'  key={index}>
-                            <Link className="linkpokemon" to={'/Home/'}>
+                            <Link className="linkpokemon" to={'/detail/'+ e.id}>
                                  <Card name={e.name}
                                  
                                  img={e.img} 
-                                 type={e.type.map(e => e)}
+                                 type={Array.isArray(e.types)?e.types.map(e => e):e.types.split(', ')}
 
                                  />
                              </Link>
@@ -113,9 +143,10 @@ return (
                        
                     );
                 }):<div><h1 className="LOADING">ESPERANDO A LOS OTROS POKEMONS...</h1>
-                <img src='https://www.pkparaiso.com/imagenes/espada_escudo/sprites/animados-gigante/charmander.gif'></img>
-                <img src='https://images.wikidexcdn.net/mwuploads/wikidex/thumb/a/af/latest/20200102034804/Arcanine_EpEc.gif/180px-Arcanine_EpEc.gif'></img>
-                <img src='https://c.tenor.com/SxdB4i4FgQwAAAAC/charmander-marshmallows.gif'></img>
+                <img src='https://www.pkparaiso.com/imagenes/espada_escudo/sprites/animados-gigante/charmander.gif' alt="not found"></img>
+                <img src='https://images.wikidexcdn.net/mwuploads/wikidex/thumb/a/af/latest/20200102034804/Arcanine_EpEc.gif/180px-Arcanine_EpEc.gif' alt="not found"></img>
+                <img src= {gif} 
+                alt="not found"></img>
                 </div>
         
         }

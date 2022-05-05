@@ -9,13 +9,14 @@ export default function Search(){
 
 function handleInputChange(e){
     e.preventDefault()
-    setName(e.target.value)
+    setName(e.target.value);
+    
 }
 
 function handleSubmit(e){
     e.preventDefault()
-    dispatch(getNamePokemons(name))
-
+    dispatch(getNamePokemons(name));
+     console.log("soy el ",e)
 }
 
  return(

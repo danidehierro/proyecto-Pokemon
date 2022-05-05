@@ -7,7 +7,7 @@ import { POKEMONS } from "../actions"
 
 const initialState = {
     pokemons : [],
-    allPokemon: [],
+    allPokemons: [],
     types: [],
     detail:[]
 
@@ -20,23 +20,32 @@ function rootReducer (state= initialState, action ) {
             return{
                 ...state,
                 pokemons: action.payload,
-                
+                allPokemons: action.payload
       }
       case 'GET_NAME_POKEMONS':
       return{
           ...state,
           pokemons: action.payload
+         
       }
   case 'FILTER_BY_TYPES':
-      let allPokemons = [...state.allPokemon];
-      let typesFiltered = action.payload === 'All' ? allPokemons : allPokemons.filter(el => el.type?.includes(action.payload))
-      //console.log(dietsFiltered)
+      let allPokemons = state.allPokemons;
+      let typesFiltered = action.payload === 'All' ? allPokemons : allPokemons.filter(el => el.types[0] === action.payload || el.types[1] === action.payload)
+      console.log(typesFiltered)
        
       return{
           ...state,
           pokemons: typesFiltered
       }
-  case 'GET_TYPES':
+      case 'FILTER_CREATED':
+        const createdFilter = action.payload === 'created' ? state.allPokemons.filter(e => e.createdInDb) : state.allPokemons.filter(e => !e.createdInDb)
+           console.log('soy el reducer',createdFilter)
+        return{
+                ...state,
+                pokemons: action.payload === 'All' ? state.allPokemons : createdFilter
+            }
+  
+        case 'GET_TYPES':
       return {
           ...state,
           types: action.payload
@@ -95,6 +104,7 @@ function rootReducer (state= initialState, action ) {
           }
 
       case "GET_DETAILS":
+          console.log(" soy el reducer ",action.payload)
           return{
               ...state,
               detail: action.payload
