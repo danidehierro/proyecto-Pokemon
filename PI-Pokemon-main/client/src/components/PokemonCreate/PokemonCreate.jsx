@@ -5,12 +5,62 @@ import { useDispatch, useSelector } from "react-redux";
 import './PokemonCreate.css'
 export default function PokemonCreate(){
 
-
     const dispatch = useDispatch()
     const history = useHistory()
     const type = useSelector((state) => state.types)
-    const [error, setError] = useState({required: true});
+    const [error, setError] = useState({required: false});
+    console.log(type)
 
+
+    function Validation(input){
+
+        let error = {required: false};
+        if(!input.name){
+            error.name = 'Please enter the name of the Pokemon'
+            error.name= true;
+        } else if (!/^[A-Za-zÁÉÍÓÚáéíóúñÑ ]+$/g.test(input.name)){
+            error.name = 'invalid name';
+            error.required = true
+        }
+        if(input.attack <= 0 || input.attack > 150){
+            error.attack = 'attack must be between 0 and 150'
+            error.required = true
+        }
+        if(input.defense <= 0 || input.defense > 100){
+            error.defense = 'defense must be between 0 and 100'
+            error.require = true
+        }
+        if(input.speed <= 0 || input.speed > 200){
+            error.speed = 'speed  must be between 0 and 200'
+            error.required = true
+        }
+        if(input.hp <= 0 || input.hp > 180){
+            error.hp = 'hp must be between 0 and 180'
+            error.required = true
+        }
+        if(input.height <= 0 || input.height > 100){
+            error.height = 'height score must be between 0 and 100'
+            error.required = true
+        }if(input.weight <= 0 || input.weight > 1000){
+            error.weight = 'weight must be between 0 and 1000'
+            error.required = true
+        }
+        if(input.speed <= 0 || input.speed > 200){
+            error.speed = 'speed score must be between 0 and 200'
+            error.required = true
+        }
+        if(!input.img){
+            error.img = 'Please enter image png or jpg'
+            error.img= true;
+        } else if (!/(https?:\/\/.*\.(?:png|jpg))/i.test(input.img)){
+            error.img = 'invalid image';
+            error.required = true
+        }
+
+        return error;
+    }
+
+   
     const [input,setInput]= useState({
         name:"",
         attack:"",
@@ -24,13 +74,14 @@ export default function PokemonCreate(){
 
     })
     
+    
     function handleChange(e){
         setInput({
             ...input,
             [e.target.name] : e.target.value
         })
-       /*  let objError = Validation({...input, [e.target.name] : e.target.value})
-        setError(objError) */
+        let objError = Validation({...input, [e.target.name] : e.target.value})
+        setError(objError)
     }
     function handleCheck(e){
         if(e.target.checked){
@@ -64,12 +115,12 @@ export default function PokemonCreate(){
     },[]);
 
     return(
-        <div className="containerRecipe" >
+        <div className="containerPokemon" >
          <Link to= '/home'><button>Volver</button> </Link>
          <h1 className="titleCR">Pokemón Creation</h1>
          <form  onSubmit={(e) => handleSubmit(e)} className="list-item">
             <div >
-             <label>Nombre:</label>
+             <label>Name:</label>
                 <input
                 type='text'
                 value={input.name}
@@ -97,7 +148,7 @@ export default function PokemonCreate(){
                 name='defense'
                 onChange={(e) => handleChange(e)}
                 />
-            
+             {!error.defense ? null : (<span>{error.defense}</span>)}
             </div>
             <div>
             <label>Speed:</label>
@@ -107,9 +158,9 @@ export default function PokemonCreate(){
                 name='speed'
                 onChange={(e) => handleChange(e)}
                 />
-            
+             {!error.speed ? null : (<span>{error.speed}</span>)}
             </div>
-         
+             
            
             <div>
             <label>Hp:</label>
@@ -129,7 +180,7 @@ export default function PokemonCreate(){
                 name='height'
                 onChange={(e) => handleChange(e)}
                 />
-                 {!error.height ? null : (<span>{error.height}</span>)}
+                 {!error.height ? null : (<span className="height">{error.height}</span>)}
              </div>
              <div>
             <label>Weight:</label>
@@ -149,71 +200,33 @@ export default function PokemonCreate(){
                 name='img'
                 onChange={(e) => handleChange(e)}
                 />
-            
+            {!error.img ? null : (<span>{error.img}</span>)}
             </div>
-             <div>
-                 <label>Types:</label>
-              <label>
+             <div className="typescheck">
+                 <h2>Types:</h2>
+
+                { type.map((e,x) => { 
+                    return(
+                        <label key={x} className= " maptypes">
               <input  
               type='checkbox'
-              name='fire'
-              value='fire'
+              name= {e.name}
+              value= {e.name}
               onChange={(e) => handleCheck(e)}
-              />Fire</label> 
-               <label>
-              <input  
-              type='checkbox'
-              name='water'
-              value='water'
-              onChange={(e) => handleCheck(e)}
-              />Water</label>
-               <label>
-              <input  
-              type='checkbox'
-              name='bug'
-              value='bug'
-              onChange={(e) => handleCheck(e)}
-              />Bug</label>
-               <label>
-              <input  
-              type='checkbox'
-              name='poison'
-              value='poison'
-              onChange={(e) => handleCheck(e)}
-              />Poison</label>
-               <label>
-              <input  
-              type='checkbox'
-              name='electric'
-              value='electric'
-              onChange={(e) => handleCheck(e)}
-              />Electric</label> 
-               <label>
-              <input  
-              type='checkbox'
-              name='rock'
-              value='rock'
-              onChange={(e) => handleCheck(e)}
-              />Rock</label>
-               <label>
-              <input  
-              type='checkbox'
-              name='grass'
-              value='grass'
-              onChange={(e) => handleCheck(e)}
-              />Grass</label> 
-               <label>
-              <input  
-              type='checkbox'
-              name='ice'
-              value='ice'
-              onChange={(e) => handleCheck(e)}
-              />Ice</label>                                
+              />{e.name}</label> 
+                    )
+                 })}
+
+            
+
+
+          
                                                             
                                                            
-                     <button type='submit'>Create Pokemón</button>                                      
+                     <button type='submit'  disabled = {error.required} >Create Pokemón</button>                                      
                                                            
-                                                           
+                     {console.log(typeof error.required) }            
+                     {console.log( error.required) }                      
           </div>
 
          </form>

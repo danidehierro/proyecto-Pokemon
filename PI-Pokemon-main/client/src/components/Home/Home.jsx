@@ -59,7 +59,7 @@ return (
     <div className="navcontainer">
 
   <Link to= '/pokemons'>
-      <button>Crear Pokemon</button>
+      <button className="my_button">Crear Pokemon</button>
   </Link>
   <h1 className="titlehome"> APP POKEMÓN </h1>
     
@@ -140,11 +140,11 @@ return (
                                  />
                              </Link>
                              </div>
-                       
+                       /* {`${myPokemon.id.length > 10 ?myPokemon.types.map(el => el.name).join(', ')  : myPokemon.types}`} */
                     );
-                }):<div><h1 className="LOADING">ESPERANDO A LOS OTROS POKEMONS...</h1>
+                }):<div><h1 className="LOADING">Loading...</h1>
                 <img src='https://www.pkparaiso.com/imagenes/espada_escudo/sprites/animados-gigante/charmander.gif' alt="not found"></img>
-                <img src='https://images.wikidexcdn.net/mwuploads/wikidex/thumb/a/af/latest/20200102034804/Arcanine_EpEc.gif/180px-Arcanine_EpEc.gif' alt="not found"></img>
+                
                 <img src= {gif} 
                 alt="not found"></img>
                 </div>

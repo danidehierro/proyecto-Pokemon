@@ -1,0 +1,24 @@
+.containerPokemon{
+    display: grid;
+    grid-template-columns: 180px ;
+    justify-items: center;
+    justify-content:center;
+    background-color: rgba(0, 0, 0, 0.315);
+    background-image: url('https://images.wikidexcdn.net/mwuploads/wikidex/thumb/a/af/latest/20200102034804/Arcanine_EpEc.gif/180px-Arcanine_EpEc.gif');
+    background-repeat: no-repeat;
+    background-size:contain;
+    background-position: 75%;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color:black(245, 4, 4, 0.829);
+    text-shadow: -3px 4px 3px hsl(184, 98%, 48%) ;
+}
+
+
+.maptypes{
+    display:inline-flex;
+    justify-content:space-around;
+    font-size:larger;
+    font-family: 'Times New Roman', Times, serif;
+     background-color: rgba(242, 233, 221, 0.365);
+}
+
