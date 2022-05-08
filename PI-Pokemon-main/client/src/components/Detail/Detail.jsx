@@ -25,7 +25,7 @@ export default function Detail(props){
                 <div className="detail">
                     {/* {console.log(myPokemon.types.map(el => el.name))} */}
                     <h1>{myPokemon.name}</h1>
-                    <img className="imgdetail" src={myPokemon.img}/>
+                    <img className="imgdetail" src={myPokemon.img} alt='not found'/>
                     <h2>attack: {myPokemon.attack}</h2>
                    <h2>types:  {`${myPokemon.id.length > 10 ?myPokemon.types.map(el => el.name).join(', ')  : myPokemon.types}`}</h2>
                     <h3>height: {myPokemon.height}</h3>

@@ -112,11 +112,11 @@ export default function PokemonCreate(){
 
     useEffect(() => {
         dispatch(getTypes());
-    },[]);
+    },[dispatch]);
 
     return(
         <div className="containerPokemon" >
-         <Link to= '/home'><button>Volver</button> </Link>
+         <Link to= '/home'><button className="buttonv">Volver</button> </Link>
          <h1 className="titleCR">Pokemón Creation</h1>
          <form  onSubmit={(e) => handleSubmit(e)} className="list-item">
             <div >
@@ -223,7 +223,7 @@ export default function PokemonCreate(){
           
                                                             
                                                            
-                     <button type='submit'  disabled = {error.required} >Create Pokemón</button>                                      
+                     <button className="button" type='submit'  disabled = {error.required} >Create Pokemón</button>                                      
                                                            
                      {console.log(typeof error.required) }            
                      {console.log( error.required) }                      

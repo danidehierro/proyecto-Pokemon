@@ -22,3 +22,44 @@
      background-color: rgba(242, 233, 221, 0.365);
 }
 
+.button{
+
+    background-color:black;
+    color:aqua;
+    font-size: 20px;
+    font-family:'Times New Roman', serif;
+    align-items: center;
+    text-decoration: none;
+    border-radius: 10px;
+    
+}
+.button:hover {
+    transform: perspective(500px) rotateY(15deg);
+    text-shadow: -6px 3px 2px rgba(245, 245, 245, 0.535);
+    box-shadow: -2px 0 0 5px rgba(0, 255, 255, 0.557);
+}
+.button::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to right, transparent, white, transparent);
+    left: -100%;
+    transition: 0.5s;
+}
+.buttonv{
+
+    background-color:black;
+    color:aqua;
+    font-size: 25px;
+    font-family:'Times New Roman', serif;
+    align-items: center;
+    text-decoration: none;
+    border-radius: 10px;
+    
+}
+.buttonv:hover {
+    transform: perspective(500px) rotateY(15deg);
+    text-shadow: -6px 3px 2px rgba(245, 245, 245, 0.535);
+    box-shadow: -2px 0 0 5px whitesmoke;
+}

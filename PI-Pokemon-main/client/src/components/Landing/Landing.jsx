@@ -1,11 +1,12 @@
 import {Link} from 'react-router-dom';
-
+import './Landing.css'
 export default function Landing(){
     return(
-        <div>
+        <div className='landing'>
+            
            <h1> App Pokemón </h1>
           <Link to='/home'>
-              <button>WELCOME</button>
+              <button className='botton'>WELCOME</button>
           </Link>
 
         </div>

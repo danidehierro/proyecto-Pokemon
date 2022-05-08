@@ -12,27 +12,21 @@ import gif from '../image/charmander-marshmallows-unscreen.gif';
 export default function Home (){
     const dispatch = useDispatch()
     const allPokemon = useSelector((state) => state.pokemons)
-    const type = useSelector((state) => state.pokemons.types)
-    console.log(allPokemon)
-    const [orden, setOrden]= useState('')
+    const [orden,setOrden]= useState('')
     const [currentPage, setCurrentPage] = useState(1)
-    const [pokemonsPerPage, setpokemonsPerPage] = useState(12)
+    const [pokemonsPerPage] = useState(3)
     const indexOfLastPokemon = currentPage * pokemonsPerPage // 6
     const indexOfFirstPokemon = indexOfLastPokemon - pokemonsPerPage // 0
     const currentPokemons = Array.isArray(allPokemon)? allPokemon.slice(indexOfFirstPokemon,indexOfLastPokemon):[allPokemon]
-    //console.log(currentPokemons)
-    //const types = currentPokemons.map(el => el.type.map(ele => ele))
-    // console.log(types)
+    
     const pagin =(pageNumber) => {
         setCurrentPage(pageNumber)
     }
+
     useEffect (() =>{
         dispatch(getPokemons())
     },[dispatch])
-  
-    
-  
-   
+
   
     function handleSort (e){
         e.preventDefault();
@@ -100,8 +94,7 @@ return (
                     <option value= 'ghost'> ghost </option>
                     <option value= 'steel'> steel </option>
                     <option value= 'grass'> grass </option>
-
-
+             
                   {/*   {
                       
                         type?.map(el => {
@@ -118,6 +111,7 @@ return (
          <Search/>
             </div>
             <Pagin
+            currentPage={currentPage}
             pokemonsPerPage={pokemonsPerPage}
             allPokemon={allPokemon.length}
             pagin={pagin} />
@@ -140,7 +134,7 @@ return (
                                  />
                              </Link>
                              </div>
-                       /* {`${myPokemon.id.length > 10 ?myPokemon.types.map(el => el.name).join(', ')  : myPokemon.types}`} */
+                       
                     );
                 }):<div><h1 className="LOADING">Loading...</h1>
                 <img src='https://www.pkparaiso.com/imagenes/espada_escudo/sprites/animados-gigante/charmander.gif' alt="not found"></img>
