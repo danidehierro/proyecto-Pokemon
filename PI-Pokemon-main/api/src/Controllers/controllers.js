@@ -56,58 +56,14 @@ const getApi = () =>{
 
                 })
             })
-            //console.log(allData)
+        
             return allData
         })
         
 
    )}
 
-/* let getApi = async () => {
-    try {
-        let info = [];
-        for (let i = 1; i <= 40; i++) {
-            info.push(await axios.get('https://pokeapi.co/api/v2/pokemon/' + i));
-            console.log(info[i-1].data.id)
-        }
-        return await Promise.all(info).then((response) => {
-            const pokemones = response.map((info) => {
-                return (poke = {
-                    name: info.data.name,
-                    id: info.data.id,
-                    img: info.data.sprites.other.dream_world.front_default,
-                    types: info.data.types.map((e) => e.type.name),
-                    attack: info.data.stats[1].base_stat,
-                });
-            });
-            return pokemones;
-        });
-    } catch (error) {
-        console.log (error)
-    }
-}; */
-/* const getApi = async () => {
-    const Api = await axios.get( "https://pokeapi.co/api/v2/pokemon?limit=40")
-        
-        
-            for (let p of Api.data.results) {
-                let url = await axios.get(p.url);
-                delete p.url;
-                p.id = url.data.id;
-                p.img = url.data.sprites.versions["generation-v"]["black-white"].animated.front_default
-                p.hp = url.data.stats[0].base_stat;
-                p.attack = url.data.stats[1].base_stat;
-                p.defense = url.data.stats[2].base_stat;
-                p.speed = url.data.stats[5].base_stat;
-                p.height = url.data.height;
-                p.weight = url.data.weight;
-                p.type = url.data.types.map((el) => el.type.name);
-              }
-        
-       return apiAll;
-            
-            
-        } */
+
         
         const getpokemonid = async (id) => {
             let e= undefined;
@@ -129,7 +85,7 @@ const getApi = () =>{
           } else{ 
          e = await axios.get(`https://pokeapi.co/api/v2/pokemon/${id}`)
           }  
-          console.log(e.dataValues) 
+          //console.log(e.dataValues) 
        let pok = {
             name: e.data ? e.data.name: e.dataValues.name,
             id:e.data ? e.data.id : e.dataValues.id,
@@ -150,6 +106,8 @@ const getApi = () =>{
 
         const getpokemonname = async (name) => {
             const e = await axios.get(`https://pokeapi.co/api/v2/pokemon/${name}`)
+            
+            
            let poke = {
                 name:e.data.name,
                 id: e.data.id,
@@ -166,7 +124,43 @@ const getApi = () =>{
                 return poke
             }
 
-       
+            
+
+            const getpokemondb = async (name) => {
+                let e= undefined;
+              if(name){
+             e = await Pokemon.findOne({
+                   where: {
+                       name
+                   },
+                   include:{
+                    model:Types,
+                    attributes:["name"],
+                    through:{
+                        attributes:[]
+                    }
+                }   
+            })
+              if(e){
+             let poke = {
+
+                    name: e.dataValues.name,
+                    id:e.dataValues.id,
+                    img:e.dataValues.img ,
+                    types: e.dataValues.types,
+                    attack:e.dataValues.attack,
+                    height: e.dataValues.height,
+                    weight: e.dataValues.weight,
+                    hp: e.dataValues.hp,
+                    defense:e.dataValues.defense,
+                    speed: e.dataValues.speed,
+                }
+                    return poke
+                }}
+                return("error")
+                    
+
+            }
    
 
 
@@ -180,9 +174,9 @@ const getApi = () =>{
        const allApi = await getApi().then(res => res);
         const allDb = await getDb();
         const total = allApi.concat(allDb);
-       console.log(allApi)
+       
         return total;
     }
 
 module.exports = 
-    {getAll , getpokemonid,getpokemonname};
+    {getAll , getpokemonid,getpokemonname,getpokemondb};
