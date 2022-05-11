@@ -8,6 +8,7 @@ import { POKEMONS } from "../actions"
 const initialState = {
     pokemons : [],
     allPokemons: [],
+    allPokemons2:[],
     types: [],
     detail:[]
 
@@ -15,34 +16,46 @@ const initialState = {
 
 
 function rootReducer (state= initialState, action ) {
+    
     switch(action.type) {
         case POKEMONS:
             return{
                 ...state,
                 pokemons: action.payload,
-                allPokemons: action.payload
+                allPokemons: action.payload,
+                allPokemons2:action.payload
       }
       case 'GET_NAME_POKEMONS':
+          
+          
       return{
           ...state,
           pokemons: action.payload
          
       }
+
   case 'FILTER_BY_TYPES':
-      let allPokemons = state.allPokemons;
-      let typesFiltered = action.payload === 'All' ? allPokemons : allPokemons.filter(el => el.types[0] === action.payload || el.types[1] === action.payload)
-      console.log(typesFiltered)
+        state.pokemons = state.allPokemons2
+      console.log(state.allPokemons2)
+      let typesFiltered = action.payload === 'All' ?  state.allPokemons2 :  state.allPokemons2.filter(el => el.types.map(e =>  {
+          if(typeof e === "string") return e;
+          else{ return e.name }}).includes(action.payload))
+        while(typesFiltered.length !== 0){
+        
        
       return{
           ...state,
           pokemons: typesFiltered
-      }
+          
+      }}
+      alert("I don't know found the type of Pokemón")
       case 'FILTER_CREATED':
         const createdFilter = action.payload === 'created' ? state.allPokemons.filter(e => e.createdInDb) : state.allPokemons.filter(e => !e.createdInDb)
            console.log('soy el reducer',createdFilter)
         return{
                 ...state,
-                pokemons: action.payload === 'All' ? state.allPokemons : createdFilter
+                pokemons: action.payload === 'All' ? state.allPokemons : createdFilter,
+                allPokemons2: action.payload === 'All' ? state.allPokemons : createdFilter
             }
   
         case 'GET_TYPES':
@@ -55,6 +68,8 @@ function rootReducer (state= initialState, action ) {
           ...state,
       }
   case 'ORDER_BY_NAME':
+      console.log(state.pokemons)
+      
       let sortArr = action.payload === 'asc' ?
       state.pokemons.sort(function (a,b){
           if (a.name > b.name) {
@@ -79,7 +94,9 @@ function rootReducer (state= initialState, action ) {
           pokemons: sortArr
       }
       case "ORDER_BY_ATTACK":
+        if (state.pokemons.length > 0){
           let sortArre = action.payload === 'low' ?
+          
           state.pokemons.sort(function (a,b){
               if (a.attack > b.attack) {
                   return 1;
@@ -102,6 +119,7 @@ function rootReducer (state= initialState, action ) {
               ...state,
               pokemons: sortArre
           }
+          }  
 
       case "GET_DETAILS":
           console.log(" soy el reducer ",action.payload)

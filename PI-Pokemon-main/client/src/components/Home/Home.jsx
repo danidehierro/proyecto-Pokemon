@@ -12,9 +12,11 @@ import gif from '../image/charmander-marshmallows-unscreen.gif';
 export default function Home (){
     const dispatch = useDispatch()
     const allPokemon = useSelector((state) => state.pokemons)
+    const allPokemons2 = useSelector((state) => state.allPokemons2)
+    const allPokemons = useSelector((state) => state.allPokemons)
     const [orden,setOrden]= useState('')
     const [currentPage, setCurrentPage] = useState(1)
-    const [pokemonsPerPage] = useState(3)
+    const [pokemonsPerPage] = useState(6)
     const indexOfLastPokemon = currentPage * pokemonsPerPage // 6
     const indexOfFirstPokemon = indexOfLastPokemon - pokemonsPerPage // 0
     const currentPokemons = Array.isArray(allPokemon)? allPokemon.slice(indexOfFirstPokemon,indexOfLastPokemon):[allPokemon]
@@ -104,7 +106,7 @@ return (
                         }) 
                     } */}
                 </select>
-           
+               
   </div>
          
          
@@ -117,10 +119,12 @@ return (
             pagin={pagin} />
 
 
-
+             
              <div className="container">
-            {
-               currentPokemons.length >0 ? currentPokemons.map((e, index) =>{
+             {console.log(currentPokemons)}
+             
+            { 
+               currentPokemons.length > 0 ? currentPokemons.map((e, index) =>{
                     
                   return (
                        

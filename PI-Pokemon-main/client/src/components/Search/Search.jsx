@@ -16,7 +16,7 @@ function handleInputChange(e){
 function handleSubmit(e){
     e.preventDefault()
     dispatch(getNamePokemons(name));
-     console.log("soy el ",e)
+     
 }
 
  return(

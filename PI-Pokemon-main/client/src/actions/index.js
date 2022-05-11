@@ -13,19 +13,19 @@ export function getPokemons(){
     }
 }
 export function getTypes(){
-    return async function(dispacth){
+    return async function(dispatch){
         var json = await axios.get("http://localhost:3001/types",{
             
         });console.log(json)
-        return dispacth({
+        return dispatch({
             type:"GET_TYPES",
             payload: json.data
         });           
     }}
 
     export function postPokemon(payload){
-        return async function(dispacth){
-            console.log("soy un tipo de pokemon",payload)
+        return async function(dispatch){
+            
             var data = await axios.post("http://localhost:3001/pokemons",payload);
             return { 
                 type:"POST_POKEMON",
@@ -36,7 +36,7 @@ export function getTypes(){
 
 
 export function filterPokemonsByTypes(payload){
-    //console.log(payload)
+   // console.log(payload)
     return {
         type: "FILTER_BY_TYPES",
         payload
@@ -66,13 +66,15 @@ export function getNamePokemons(name){
     return async function (dispatch){
         try {
             var json = await axios.get(`http://localhost:3001/pokemons?name=${name}`);
-            console.log(json)
+            console.log(json.data)
+            if(json.data === "error")throw Error
             return dispatch({
                 type:"GET_NAME_POKEMONS",
                 payload: json.data
             })
         } catch (error){
             console.log(error)
+            alert ("no se encontro el pokemon")
         }
     }
 }
